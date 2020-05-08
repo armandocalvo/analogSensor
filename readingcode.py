@@ -6,9 +6,9 @@ spi = spidev.SpiDev()
 spi.open(0, 0)                              #
 
 sleepTime = 1
+sensor1Channel = 0
 
 #Funtions to read the channel from the MCP3008, convert the reading to voltage and then convert the voltage to pressure
-
 def getReading(channel):
   rawData = spi.xfer([1, (8 + channel) << 4, 0])            #Takes the raw value of the MCP3008
   processedData = ((rawData[1] & 3) << 8) + rawData[2]      #Process the raw value
