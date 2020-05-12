@@ -5,7 +5,7 @@ from time import sleep
 spi = spidev.SpiDev()
 spi.open(0, 0)                              #
 
-sleepTime = 1
+sleepTime = 0.5
 sensor1Channel = 0
 
 #Funtions to read the channel from the MCP3008, convert the reading to voltage and then convert the voltage to pressure
@@ -15,12 +15,12 @@ def getReading(channel):
   return processedData                                      #Return the process value
   
 def convertVoltage(bitValue, decimalPlaces = 2):
-  voltage = (bitValue * 3.3) / float(1023)                  #Formula to convert the bit value to voltage
+  voltage = ((bitValue * 3.3) / float(1023)) #- 1.362       #Formula to convert the bit value to voltage
   voltage = round(voltage, decimalPlaces)                   #Round the data to two decimals
   return voltage                                            #Return the value in terms of voltage
 
 def convertPressure(voltage, decimalPlaces = 2):
-  pressure = ((voltage * 1.2) / 3.3)                        #Formula to convert the voltage to pressure
+  pressure = ((voltage * 1.2) / 3.3) #+ 0.0023              #Formula to convert the voltage to pressure
   pressure = round(pressure, decimalPlaces)                 #Round the data to two decimals
   return pressure                                           #Return the value in terms of pressure
 
@@ -41,7 +41,7 @@ while True:
   #pressure3 = convertPressure(sensor3Voltage)
   #pressure4 = convertPressure(sensor4Voltage)
   
-  print("FP1: {}V --> {}MPa".format(sensor1Voltage, pressure1))
+  print("{}bits --> {}V --> {}MPa".format(sensor1Data, sensor1Voltage, pressure1))
   #print("FP2: {}V --> {}MPa".format(sensor2Voltage, pressure2))
   #print("FP3: {}V --> {}MPa".format(sensor3Voltage, pressure3))
   #print("FP4: {}V --> {}MPa".format(sensor4Voltage, pressure4))
